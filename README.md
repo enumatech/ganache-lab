@@ -1,4 +1,4 @@
-# Ganache lab
+# Ganache Core laboratory
 
 This is a demonstration of Ethereum smart-contract exploration environment
 combining
@@ -37,8 +37,7 @@ accumulated quite some legacy code already...
 
 Truffle builds on the (as of 2017-12-15) latest stable version of the
 [web3.js](https://github.com/ethereum/web3.js/) Ethereum RPC client,
-which lacks some nice feature already present in the upcoming 1.x versions
-of `web3.js`.
+which lacks some nice feature already present its upcoming 1.x versions.
 
 [ethjs](https://github.com/ethjs/ethjs) however is a leaner alternative to
 `web3.js`. After seeing even a
