@@ -7,8 +7,15 @@ const Ganache = require("ganache-core")
 const truffleMnemonic = 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat'
 
 const fs = require('fs')
-const ExampleABI = JSON.parse(fs.readFileSync(require.resolve('../out/Example.abi'), 'utf-8'))
-const ExampleBytecode = fs.readFileSync(require.resolve('../out/Example.bin'), 'utf-8')
+
+let ExampleABI, ExampleBytecode
+try {
+    ExampleABI = JSON.parse(fs.readFileSync(require.resolve('../out/Example.abi'), 'utf-8'))
+    ExampleBytecode = fs.readFileSync(require.resolve('../out/Example.bin'), 'utf-8')
+} catch (e) {
+    console.log('No contracts found in the ./out/ folder')
+    return
+}
 
 describe('Example DSToken test with web3.js 1.x', function () {
     let provider, web3, snaps
