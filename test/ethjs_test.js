@@ -1,13 +1,4 @@
-const chai = require('chai')
-const expect = chai.expect
-
-const {Assertion} = chai
-Assertion.addMethod('eq', function (N) {
-    this.assert(new BN(this._obj).eq(new BN(N)),
-        'expected #{act} to equal #{exp}',
-        'expected #{act} NOT to equal #{exp}',
-        N, this._obj)
-})
+const {expect} = require('./test_helpers.js')
 
 const Eth = require('ethjs')
 const {BN, toBN} = Eth
@@ -22,11 +13,11 @@ const SimpleStoreABI = JSON
 const SimpleStoreBytecode = '606060405234610000575b5b5b61010e8061001a6000396000f360606040526000357c01000000000000000000000000000000000000000000000000000000009004806360fe47b1146100435780636d4ce63c14610076575b610000565b346100005761005e6004808035906020019091905050610099565b60405180821515815260200191505060405180910390f35b3461000057610083610103565b6040518082815260200191505060405180910390f35b6000816000819055507f10e8e9bc5a1bde3dd6bb7245b52503fcb9d9b1d7c7b26743f82c51cc7cce917d60005433604051808381526020018273ffffffffffffffffffffffffffffffffffffffff1681526020019250505060405180910390a1600190505b919050565b600060005490505b9056'
 
 
-describe('Chain', function () {
+describe('Chain with ethjs', function () {
     let provider, eth, accounts, snapshot, revert, snaps, simpleStore
 
     before(async () => {
-        // Initializ an (ethjs)  client to an empty, in-memory blockchain
+        // Initialize an (ethjs)  client to an empty, in-memory blockchain
         provider = Ganache.provider({mnemonic: truffleMnemonic})
         eth = new Eth(provider)
 
