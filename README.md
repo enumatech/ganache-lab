@@ -12,6 +12,8 @@ combining
 
 Install with `yarn install`.
 
+If you want to see external contract loading, then `dapp build`.
+
 Run the tests manually with `yarn test --watch`.
 
 Change something in `test/chain_test.js` and save the file.
@@ -37,7 +39,8 @@ accumulated quite some legacy code already...
 
 Truffle builds on the (as of 2017-12-15) latest stable version of the
 [web3.js](https://github.com/ethereum/web3.js/) Ethereum RPC client,
-which lacks some nice feature already present its upcoming 1.x versions.
+which lacks some nice feature already present its upcoming 1.x versions,
+like [calling methods with the same name but different parameter lists](https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#id12), eg. `myToken.methods['mint(uint256)'](123)`.
 
 [ethjs](https://github.com/ethjs/ethjs) however is a leaner alternative to
 `web3.js`. After seeing even a
