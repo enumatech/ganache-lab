@@ -7,21 +7,14 @@ const Ganache = require("ganache-core")
 const truffleMnemonic = 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat'
 
 const fs = require('fs')
-
-let ExampleABI, ExampleBytecode
-try {
-    ExampleABI = JSON.parse(fs.readFileSync(require.resolve('../out/Example.abi'), 'utf-8'))
-    ExampleBytecode = fs.readFileSync(require.resolve('../out/Example.bin'), 'utf-8')
-} catch (e) {
-    console.log('No contracts found in the ./out/ folder')
-    return
-}
+const load = (path) => fs.readFileSync(require.resolve(path), 'utf-8')
 
 describe('Example DSToken test with web3.js 1.x', function () {
     let provider, web3, snaps
+    let ExampleABI, ExampleBytecode
     let accounts, DEPLOYER, CUSTOMER, example
 
-    before(async () => {
+    before(async function () {
         // Initialize an empty, in-memory blockchain
         provider = Ganache.provider({mnemonic: truffleMnemonic})
 
@@ -51,6 +44,13 @@ describe('Example DSToken test with web3.js 1.x', function () {
         CUSTOMER = accounts[1]
 
         // Deploy example contract
+        try {
+            ExampleABI = JSON.parse(load('../out/Example.abi'))
+            ExampleBytecode = load('../out/Example.bin')
+        } catch (e) {
+            console.log('No contracts found in the ./out/ folder', e)
+            return this.skip()
+        }
         const Example = new web3.eth.Contract(ExampleABI)
         example = await Example.deploy({data: ExampleBytecode})
             .send({from: DEPLOYER, gas: 3000000})
