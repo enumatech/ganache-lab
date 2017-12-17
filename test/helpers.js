@@ -24,7 +24,13 @@ const readImport = (file) => {
 }
 
 const solcJSON = (plan) => {
-    return JSON.parse(solc.compileStandardWrapper(JSON.stringify(plan), readImport))
+    const compiled = JSON.parse(solc.compileStandardWrapper(JSON.stringify(plan), readImport))
+    if (compiled.errors) {
+        const msg = ({formattedMessage}) => formattedMessage
+        throw new Error('\n' + compiled.errors.map(msg).join('\n'))
+    } else {
+        return compiled
+    }
 }
 
 const ganacheWeb3 = () => {

@@ -41,10 +41,17 @@ const readImport = (file) => {
 }
 
 const solcJSON = (plan) => {
-    return JSON.parse(solc.compileStandardWrapper(JSON.stringify(plan), readImport))
+    const compiled = JSON.parse(solc.compileStandardWrapper(JSON.stringify(plan), readImport))
+    if (compiled.errors) {
+        const msg = ({formattedMessage}) => formattedMessage
+        throw new Error('\n' + compiled.errors.map(msg).join('\n'))
+    } else {
+        return compiled
+    }
 }
+
 describe('solcjs', () => {
-    it('compiles', function () {
+    it('compiles', async () => {
         const compiled = solcJSON(contracts)
         expect(compiled).contains.keys('contracts', 'sources')
         expect(compiled.contracts['Example.sol'].Example.evm.bytecode.object).to.be.a('string')
