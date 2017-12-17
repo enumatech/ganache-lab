@@ -1,17 +1,13 @@
-const {expect} = require('./helpers.js')
-
+const {expect, solcJSON} = require('./helpers.js')
+const contracts = require('../contracts.json')
 const Web3 = require('web3')
 const {BN, toBN} = require('web3-utils')
 
 const Ganache = require("ganache-core")
 const truffleMnemonic = 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat'
 
-const fs = require('fs')
-const load = (path) => fs.readFileSync(require.resolve(path), 'utf-8')
-
-describe('Example DSToken test with web3.js 1.x', function () {
+describe('Workflow with solc-js', function () {
     let provider, web3, snaps
-    let ExampleABI, ExampleBytecode
     let accounts, DEPLOYER, CUSTOMER, example
 
     before(async function () {
@@ -44,15 +40,11 @@ describe('Example DSToken test with web3.js 1.x', function () {
         CUSTOMER = accounts[1]
 
         // Deploy example contract
-        try {
-            ExampleABI = JSON.parse(load('../out/Example.abi'))
-            ExampleBytecode = load('../out/Example.bin')
-        } catch (e) {
-            console.log('No contracts found in the ./out/ folder', e)
-            return this.skip()
-        }
-        const Example = new web3.eth.Contract(ExampleABI)
-        example = await Example.deploy({data: ExampleBytecode})
+        // console.log('Compiling...', Date())
+        const compiled = solcJSON(contracts)
+        const Example = compiled.contracts['Example.sol'].Example
+        const ExampleContract = new web3.eth.Contract(Example.abi)
+        example = await ExampleContract.deploy({data: Example.evm.bytecode.object})
             .send({from: DEPLOYER, gas: 3000000})
     })
 
@@ -64,21 +56,12 @@ describe('Example DSToken test with web3.js 1.x', function () {
         await web3.evm.revert(snaps.pop())
     })
 
-    it('is deployed', async () => {
+    it('can deploy', async () => {
         let symbol = web3.utils.hexToUtf8((await example.methods.symbol().call()))
         expect(symbol).equal('TOK')
     })
 
-    it('can mint', async () => {
-        await example.methods['mint(address,uint256)'](CUSTOMER, toBN(1)).send({from: DEPLOYER})
-        expect((await example.methods.balanceOf(CUSTOMER).call())[0]).eq(1)
-    })
-
-    it('can burn approved amount', async () => {
-        await example.methods['mint(address,uint256)'](CUSTOMER, toBN(10)).send({from: DEPLOYER})
-        await example.methods['approve(address,uint256)'](DEPLOYER, toBN(5)).send({from: CUSTOMER})
-        await example.methods['burn(address,uint256)'](CUSTOMER, toBN(3)).send({from: DEPLOYER})
-        expect((await example.methods.allowance(CUSTOMER, DEPLOYER).call())[0]).eq(2)
-        expect((await example.methods.balanceOf(CUSTOMER).call())[0]).eq(7)
+    it('gives up to date answer', async () => {
+        expect((await example.methods.meaningOfLife().call())).eq(42)
     })
 })

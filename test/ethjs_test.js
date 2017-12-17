@@ -1,4 +1,4 @@
-const {expect} = require('./test_helpers.js')
+const {expect} = require('./helpers.js')
 
 const Eth = require('ethjs')
 const {BN, toBN} = Eth

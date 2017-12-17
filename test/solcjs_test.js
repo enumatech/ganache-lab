@@ -1,4 +1,4 @@
-const {expect} = require('./test_helpers.js')
+const {expect} = require('./helpers.js')
 const solc = require('solc')
 const path = require('path')
 const fs = require('fs')

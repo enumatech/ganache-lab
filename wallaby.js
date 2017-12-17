@@ -3,8 +3,9 @@ module.exports = function () {
         files: [
             'src/*.sol',
             'lib/**/*.sol',
-            './test/test_helpers.js',
-            'out/*'
+            'test/helpers.js',
+            'out/*',
+            'contracts.json'
         ],
 
         tests: [
