@@ -1,7 +1,8 @@
 module.exports = function () {
     return {
         files: [
-            'src/*.js',
+            'src/*.sol',
+            'lib/**/*.sol',
             './test/test_helpers.js',
             'out/*'
         ],

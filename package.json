@@ -14,6 +14,7 @@
     "build": "ls src/*.sol | entr bash -c 'if dapp build; then afplay /System/Library/Sounds/Bottle.aiff; else afplay /System/Library/Sounds/Frog.aiff; fi'"
   },
   "dependencies": {
+    "solc": "^0.4.19",
     "web3": "^1.0.0-beta.26"
   }
 }
