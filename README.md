@@ -10,11 +10,20 @@ combining
 
 ## Usage
 
+_Note: A macOS environment is assumed_
+
 Install with `yarn install`.
 
 If you want to see external contract loading, then `dapp build`.
 
-Run the tests manually with `yarn test --watch`.
+For extra convenience you can install [entr](http://entrproject.org/) — a generic file watcher — with `brew install entr`  and use `yarn run build` to continuously compile contracts as their source changes.
+
+Since tests are not automatically re-run on contract recompilation, there is extra auditory feedback reflecting
+both the success or failure of the contract recompilation,
+with different sounds.
+(After contract recompilation we must use IntelliJ's `Rerun` command when using Wallaby.js to avoid false test feedback!)
+ 
+Start the test watcher and runner with `yarn test --watch`.
 
 Change something in `test/chain_test.js` and save the file.
 
