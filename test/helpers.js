@@ -1,5 +1,7 @@
 const {Assertion} = require('chai')
+const Web3 = require('web3')
 const {BN} = require('web3-utils')
+const Ganache = require("ganache-core")
 const solc = require('solc')
 const path = require('path')
 const fs = require('fs')
@@ -25,7 +27,32 @@ const solcJSON = (plan) => {
     return JSON.parse(solc.compileStandardWrapper(JSON.stringify(plan), readImport))
 }
 
+const ganacheWeb3 = () => {
+    const truffleMnemonic = 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat'
+    const provider = Ganache.provider({mnemonic: truffleMnemonic})
+    const web3 = new Web3(provider)
+
+    // Prepare chain snapshotting
+    web3.extend({
+        property: 'evm',
+        methods: [{
+            name: 'snapshot',
+            call: 'evm_snapshot',
+            params: 0,
+            outputFormatter: web3.utils.hexToNumber
+        }, {
+            name: 'revert',
+            call: 'evm_revert',
+            params: 1,
+            inputFormatter: [web3.utils.numberToHex]
+        }]
+    })
+
+    return web3
+}
+
 module.exports = {
     expect: require('chai').expect,
-    solcJSON
+    solcJSON,
+    ganacheWeb3
 }

@@ -65,7 +65,7 @@ describe('Example DSToken test with web3.js 1.x', function () {
     })
 
     it('is deployed', async () => {
-        let symbol = web3.utils.hexToUtf8((await example.methods.symbol().call()))
+        const symbol = web3.utils.hexToUtf8((await example.methods.symbol().call()))
         expect(symbol).equal('TOK')
     })
 
